@@ -1165,7 +1165,7 @@
 
       drop =
         '<div class="dropdown bootstrap-select' + showTick + inputGroup + '">' +
-          '<button type="button" tabindex="-1" class="' + this.options.styleBase + ' dropdown-toggle" ' + (this.options.display === 'static' ? 'data-display="static"' : '') + 'data-toggle="dropdown"' + autofocus + ' role="combobox" aria-owns="' + this.selectId + '" aria-haspopup="listbox" aria-expanded="false">' +
+          '<button type="button" tabindex="-1" class="' + this.options.styleBase + ' dropdown-toggle" ' + (this.options.display === 'static' ? 'data-display="static"' : '') + 'data-toggle="dropdown" data-bs-toggle="dropdown"' + autofocus + ' role="combobox" aria-owns="' + this.selectId + '" aria-haspopup="listbox" aria-expanded="false">' +
             '<div class="filter-option">' +
               '<div class="filter-option-inner">' +
                 '<div class="filter-option-inner-inner">&nbsp;</div>' +
@@ -1173,20 +1173,15 @@
             '</div>' +
             clearButton +
             '</span>' +
-            (
-              version.major === '4' ? ''
-              :
-              '<span class="bs-caret">' +
-                this.options.template.caret +
-              '</span>'
+            (version.major === '5' || version.major === '4' ? '' : '<span class="bs-caret">' + this.options.template.caret + '</span>'
             ) +
           '</button>' +
-          '<div class="' + classNames.MENU + ' ' + (version.major === '4' ? '' : classNames.SHOW) + '">' +
+          '<div class="' + classNames.MENU + ' ' + ((version.major === '5' || version.major === '4') ? '' : classNames.SHOW) + '">' +
             header +
             searchbox +
             actionsbox +
             '<div class="inner ' + classNames.SHOW + '" role="listbox" id="' + this.selectId + '" tabindex="-1" ' + multiselectable + '>' +
-                '<ul class="' + classNames.MENU + ' inner ' + (version.major === '4' ? classNames.SHOW : '') + '" role="presentation">' +
+                '<ul class="' + classNames.MENU + ' inner ' + (version.major === '5' || version.major === '4' ? classNames.SHOW : '') + '" role="presentation">' +
                 '</ul>' +
             '</div>' +
             donebutton +
@@ -2043,7 +2038,7 @@
       if (this.options.width === 'auto') menu.style.minWidth = 0;
       menu.className = classNames.MENU + ' ' + classNames.SHOW;
       menuInner.className = 'inner ' + classNames.SHOW;
-      menuInnerInner.className = classNames.MENU + ' inner ' + (version.major === '4' ? classNames.SHOW : '');
+      menuInnerInner.className = classNames.MENU + ' inner ' + ((version.major === '5' || version.major === '4') ? classNames.SHOW : '');
       divider.className = classNames.DIVIDER;
       dropdownHeader.className = 'dropdown-header';
 
@@ -2529,7 +2524,7 @@
       li.classList.toggle(classNames.DISABLED, disabled);
 
       if (a) {
-        if (version.major === '4') a.classList.toggle(classNames.DISABLED, disabled);
+        if (version.major === '5' || version.major === '4') a.classList.toggle(classNames.DISABLED, disabled);
 
         if (disabled) {
           a.setAttribute('aria-disabled', disabled);
@@ -2571,7 +2566,14 @@
       });
 
       this.$newElement.on('show.bs.dropdown', function () {
-        if (version.major > 3 && !that.dropdown) {
+        if (version.major === '5') {
+          that.toggle(null, undefined);
+          that.open();
+
+          document.body.appendChild(that.$bsContainer[0]);
+        }
+
+        if (version.major === '4' && !that.dropdown) {
           that.dropdown = that.$button.data('bs.dropdown');
           that.dropdown._menu = that.$menu[0];
         }
@@ -3409,7 +3411,7 @@
       version.success = true;
     }
 
-    if (version.major === '4') {
+    if (version.major === '4' || version.major === '5') {
       // some defaults need to be changed if using Bootstrap 4
       // check to see if they have already been manually changed before forcing them to update
       var toUpdate = [];
@@ -3502,10 +3504,10 @@
 
   $(document)
     .off('keydown.bs.dropdown.data-api')
-    .on('keydown.bs.dropdown.data-api', ':not(.bootstrap-select) > [data-toggle="dropdown"]', keydownHandler)
+    .on('keydown.bs.dropdown.data-api', ':not(.bootstrap-select) > [data-bs-toggle="dropdown"]', keydownHandler)
     .on('keydown.bs.dropdown.data-api', ':not(.bootstrap-select) > .dropdown-menu', keydownHandler)
-    .on('keydown' + EVENT_KEY, '.bootstrap-select [data-toggle="dropdown"], .bootstrap-select [role="listbox"], .bootstrap-select .bs-searchbox input', Selectpicker.prototype.keydown)
-    .on('focusin.modal', '.bootstrap-select [data-toggle="dropdown"], .bootstrap-select [role="listbox"], .bootstrap-select .bs-searchbox input', function (e) {
+    .on('keydown' + EVENT_KEY, '.bootstrap-select [data-bs-toggle="dropdown"], .bootstrap-select [role="listbox"], .bootstrap-select .bs-searchbox input', Selectpicker.prototype.keydown)
+    .on('focusin.modal', '.bootstrap-select [data-bs-toggle="dropdown"], .bootstrap-select [role="listbox"], .bootstrap-select .bs-searchbox input', function (e) {
       e.stopPropagation();
     });
 
