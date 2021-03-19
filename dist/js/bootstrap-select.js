@@ -2404,7 +2404,6 @@
         }
 
         if (version.major === '4' && !that.dropdown) {
-          console.log(4, that.$button, that.$button.data('bs.dropdown'), that.$button.data('bs.bs-toggle'), that.$button.data('bs-dropdown'))
           that.dropdown = that.$button[0].parentNode;
           that.dropdown._menu = that.$menu[0];
 
@@ -2873,8 +2872,6 @@
           (e.which >= 65 && e.which <= 90)
         )
       ) {
-        that.$button.trigger('click.bs.dropdown.data-api');
-
         if (that.options.liveSearch) {
           that.$searchbox.trigger('focus');
           return;
