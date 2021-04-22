@@ -3234,7 +3234,9 @@
     if ($.fn.dropdown) {
       // wait to define until function is called in case Bootstrap isn't loaded yet
       var bootstrapKeydown = $.fn.dropdown.Constructor._dataApiKeydownHandler || $.fn.dropdown.Constructor.prototype.keydown;
-      return bootstrapKeydown.apply(this, arguments);
+      if (bootstrapKeydown) {
+        return bootstrapKeydown.apply(this, arguments);
+      }
     }
   }
 
